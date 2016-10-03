@@ -22,6 +22,9 @@ func handleEdit(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	var entry int
 	entry, _ = strconv.Atoi(entryID)
 	trans := getSingle(db, entry, pr.ByName("type"))
+	if trans.Amount < 0 {
+		trans.Amount = trans.Amount * -1
+	}
 	var fixcheck bool
 	if pr.ByName("type") == "fixed" {
 		fixcheck = true
