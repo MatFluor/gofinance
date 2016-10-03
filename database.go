@@ -1,6 +1,6 @@
 /*
 This file holds all the database-relevant functions
-like creation, insertion adn reading
+like creation, insertion and reading
 */
 package main
 

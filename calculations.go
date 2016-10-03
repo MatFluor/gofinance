@@ -6,6 +6,8 @@ package main
 
 import "time"
 
+// Calculates the so-called "Magic Number"
+// The daily amount of money you can spend
 func calcRate(trans Transaction) float64 {
 	magicAdd := 0.0
 	switch trans.Recurrence {
