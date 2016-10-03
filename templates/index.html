@@ -1,0 +1,105 @@
+<head>
+  <title>GoFinance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" class="href">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-default">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">GoFinance</a>
+    </div>
+  </nav>
+  <div class="col-xs-12 col-sm-12 col-md-6">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <strong>Today's expenses</strong>
+      </div>
+      <div class="panel-body">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Edit</th>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .tran}}
+              <tr class="exp-row">
+                <td><a class="btn btn-default btn-sm" href="/edit/transactions/{{.ID}}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
+                <td class={{if .Income}}'bg-info'{{else}}'bg-warning'{{end}}>{{.Description}}</td>
+                <td class={{if .Income}}'bg-info'{{else}}'bg-warning'{{end}} align="right">{{.Amount | printf "%.2f"}} CHF</td>
+              </tr>
+            {{end}}
+            <tr >
+              <td></td>
+              <td>Rate for Today</td>
+              <td align="right">{{.mn | printf "%.2f"}} CHF</td>
+            </tr>
+            <tr style="outline: thin solid black">
+              <td></td>
+              <th>Total</th>
+              <th style="text-align: right;" class={{if .check}}"bg-danger"{{else}}"bg-success"{{end}}>{{.curr | printf "%.2f"}} CHF</th>
+            </tr>
+          </tbody>
+        </table>
+        <a href="/new/transaction" class="btn btn-primary" role="button">Insert new Expense</a>
+      </div>
+    </div>
+   <!-- <div class="panel panel-info">
+     <div class="panel-heading">
+       Summary
+     </div>
+     <div class="panel-body">
+       <ul class="nav nav-tabs" role="tablist">
+         <li role="presentation" class="active"><a href="#summary" data-toggle="tab">Overall</a></li>
+         <li role="presentation"><a href="#weekly" data-toggle="tab">Weekly</a></li>
+         <li role="presentation"><a href="#monthly" data-toggle="tab">Monthly</a></li>
+         <li role="presentation"><a href="#yearly" data-toggle="tab">Yearly</a></li>
+       </ul>
+       <div class="tab-content">
+         <div role="tabpanel" class="tab-pane active" id="summary"></div>
+         <div role="tabpanel" class="tab-pane" id="weekly">
+         </div>
+         <div role="tabpanel" class="tab-pane" id="monthly">
+         </div>
+         <div role="tabpanel" class="tab-pane" id="yearly">
+         </div>
+       </div>
+     </div>
+   </div> -->
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-6">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+       <strong>Fixed income / expenses</strong>
+      </div>
+      <div class="panel-body">
+        <table class="table table-bordered table-hover table-responsive">
+          <thead>
+            <tr>
+              <th>Edit</th>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Period</th>
+              <th>Influence</th>
+            </tr>
+          </thead>
+          <tbody>
+        {{range .fix}}
+          <tr class="exp-row">
+            <td><a class="btn btn-default btn-sm" href="/edit/fixed/{{.ID}}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
+            <td>{{.Description}}</td>
+            <td align="right">{{.Amount | printf "%.2f"}} CHF</td>
+            <td>{{.Recurrence}}</td>
+            <td class={{if .Income}}'bg-info'{{else}}'bg-danger'{{end}} align="right">{{.Influence | printf "%.2f"}} CHF</td>
+          </tr>
+        {{end}}
+      </tbody>
+    </table>
+        <a href="/new/fixed" class="btn btn-primary" role="button">Insert new fixed expense</a>
+      </div>
+    </div>
+  </div>
+</body>

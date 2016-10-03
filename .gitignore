@@ -1,0 +1,4 @@
+*.db
+gin-bin
+*.tar.gz
+gofinance

@@ -1,0 +1,54 @@
+<head>
+  <title>GoFinance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" class="href">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-default">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">GoFinance</a>
+    </div>
+  </nav>
+  <div class="col-xs-12 col-sm-12 col-md-6">
+    <form class="form-horizontal" action="/confirm/edit/{{.transtype}}/{{.trans.ID}}" method="post">
+      <legend>Edit income/expense</legend>
+      <div class="form-group">
+        <label for="description" class="control-label col-xs-2">Description</label>
+        <div class="col-xs-10">
+          <input type="text" class="form-control" name="description" id="description" value="{{.trans.Description}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="amount" class="control-label col-xs-2">Amount</label>
+        <div class="col-xs-10">
+          <input type="text" class="form-control" name="amount" id="amount" value="{{.trans.Amount}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+          <label><input type="checkbox" name="income" {{if .trans.Income}}checked="yes"{{end}}> Is income?</label>
+        </div>
+      </div>
+      {{if .fixcheck}}
+      <div class="form-group">
+        <label for="recurrence" class="control-label col-xs-2">Recurrence</label>
+        <div class="col-xs-10">
+          <select class="form-control" name="recurrence" id="recurrence">
+            <option {{if eq .trans.Recurrence "monthly"}}selected{{else}}value{{end}}="monthly">Monthly</option>
+            <option {{if eq .trans.Recurrence "quarterly"}}selected{{else}}value{{end}}="quarterly">Quarterly</option>
+            <option {{if eq .trans.Recurrence "twice a year"}}selected{{else}}value{{end}}="twice a year">Twice a Year</option>
+            <option {{if eq .trans.Recurrence "yearly"}}selected{{else}}value{{end}}="yearly">Yearly</option>
+          </select>
+        </div>
+      </div>
+      {{end}}
+      <div class="form-group">
+      <div class="col-xs-offset-2 col-xs-10">
+        <input type="submit" class="btn btn-info" value="Send">
+        <a href="/" class="btn btn-danger" role="button">Cancel</a>
+      </div>
+      </div>
+    </form>
+  </div>
+</body>
