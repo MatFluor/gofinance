@@ -115,7 +115,12 @@ func renderMain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	if currentNumber <= 0 {
 		smallerThanZero = true
 	}
-	t.Execute(w, map[string]interface{}{"fix": fixed, "tran": trans, "mn": magicNumber, "curr": currentNumber, "check": smallerThanZero})
+	weektotal := expensesPerPeriod("week")
+	monthtotal := expensesPerPeriod("month")
+	yeartotal := expensesPerPeriod("year")
+	t.Execute(w, map[string]interface{}{"fix": fixed, "tran": trans,
+		"mn": magicNumber, "curr": currentNumber, "check": smallerThanZero,
+		"weektotal": weektotal, "monthtotal": monthtotal, "yeartotal": yeartotal})
 }
 
 // Handler for the insertion

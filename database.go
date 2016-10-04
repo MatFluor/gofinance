@@ -213,6 +213,23 @@ func baseMagic(db *sql.DB) float64 {
 	return magicNumber
 }
 
+// This returns the total of all expenses from a specified period (week, month or year)
+func totalExpenses(db *sql.DB, period string) float64 {
+	var sqlRead string
+	var totalExpenses float64
+	switch period {
+	case "week":
+		sqlRead = "SELECT SUM(amount) FROM transactions WHERE timestamp >= date('now', 'weekday 1', '-7 days');"
+	case "month":
+		sqlRead = "SELECT SUM(amount) FROM transactions WHERE timestamp >= date('now', 'start of month');"
+	case "year":
+		sqlRead = "SELECT SUM(amount) FROM transactions WHERE timestamp >= date('now', 'start of year');"
+	}
+	row := db.QueryRow(sqlRead)
+	_ = row.Scan(&totalExpenses)
+	return totalExpenses
+}
+
 func currentMagic(db *sql.DB) float64 {
 	var magicNumber float64
 	sqlRead := `SELECT

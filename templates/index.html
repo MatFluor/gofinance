@@ -47,28 +47,30 @@
         <a href="/new/transaction" class="btn btn-primary" role="button">Insert new Expense</a>
       </div>
     </div>
-   <!-- <div class="panel panel-info">
+   <div class="panel panel-info">
      <div class="panel-heading">
-       Summary
+       <strong>Summary</strong>
      </div>
      <div class="panel-body">
-       <ul class="nav nav-tabs" role="tablist">
-         <li role="presentation" class="active"><a href="#summary" data-toggle="tab">Overall</a></li>
-         <li role="presentation"><a href="#weekly" data-toggle="tab">Weekly</a></li>
-         <li role="presentation"><a href="#monthly" data-toggle="tab">Monthly</a></li>
-         <li role="presentation"><a href="#yearly" data-toggle="tab">Yearly</a></li>
-       </ul>
-       <div class="tab-content">
-         <div role="tabpanel" class="tab-pane active" id="summary"></div>
-         <div role="tabpanel" class="tab-pane" id="weekly">
+         <div role="tabpanel" class="tab-pane active" id="summary">
+           <table class="table table-bordered table-hover">
+             <tbody>
+               <tr>
+                 <th>This Week:</th>
+                 <th class={{if gt 0.0 .weektotal }}"bg-danger"{{else}}"bg-success"{{end}}>{{.weektotal | printf "%.2f"}}</th>
+               </tr>
+               <tr>
+                 <th>This Month:</th>
+                 <th class={{if gt 0.0 .monthtotal }}"bg-danger"{{else}}"bg-success"{{end}}>{{.monthtotal | printf "%.2f"}}</th>
+               </tr>
+               <tr>
+                 <th>This Year:</th>
+                 <th class={{if gt 0.0 .yeartotal }}"bg-danger"{{else}}"bg-success"{{end}}>{{.yeartotal | printf "%.2f"}}</th>
+               </tr>
+             </tbody>
+           </table>
          </div>
-         <div role="tabpanel" class="tab-pane" id="monthly">
-         </div>
-         <div role="tabpanel" class="tab-pane" id="yearly">
-         </div>
-       </div>
      </div>
-   </div> -->
   </div>
   <div class="col-xs-12 col-sm-12 col-md-6">
     <div class="panel panel-info">

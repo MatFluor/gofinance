@@ -42,3 +42,19 @@ func daysInYear(year int) float64 {
 	}
 	return numdays
 }
+
+// Days in since beginning of week
+func expensesPerPeriod(period string) float64 {
+	expenses := totalExpenses(db, period)
+	magicNumber := baseMagic(db)
+	var total float64
+	switch period {
+	case "week":
+		total = (magicNumber * 7) + expenses
+	case "month":
+		total = (magicNumber * float64(daysInMonth(time.Now().Year(), time.Now().Month()))) + expenses
+	case "year":
+		total = (magicNumber * daysInYear(time.Now().Year())) + expenses
+	}
+	return total
+}
