@@ -23,7 +23,7 @@ func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	for i := 0; i < len(dayValues); i++ {
 		dayValues[i] = magicNumber - (dayValues[i] * -1)
 	}
-	t.Execute(w, map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues})
+	t.Execute(w, map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues, "magicnumber": magicNumber})
 }
 
 func handleEdit(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {

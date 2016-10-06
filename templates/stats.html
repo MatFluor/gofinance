@@ -9,6 +9,10 @@
 <style>
 .ct-label {
   font-size: 15px;
+
+}
+.ct-series-b .ct-line{
+  stroke: #A9A9F5;
 }
 </style>
 
@@ -34,14 +38,17 @@
  var data = {
    labels: {{.dayLabels}},
    series: [
-     {{.dayValues}}
+     {{.dayValues}},
+     [{{.magicnumber}},{{.magicnumber}},{{.magicnumber}},
+     {{.magicnumber}},{{.magicnumber}},{{.magicnumber}},
+   {{.magicnumber}}]
    ]
  };
 
 var options = {
   height: 200,
-  axisy: {
-  onlyInteger: true}
+  onlyInteger: true,
+  showArea: true
 }
 lineSmooth: Chartist.Interpolation.simple({
     divisor: 2
