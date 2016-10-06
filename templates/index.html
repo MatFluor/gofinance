@@ -8,6 +8,9 @@
   <nav class="navbar navbar-default">
     <div class="navbar-header">
       <a class="navbar-brand" href="/">GoFinance</a>
+      <ul class="nav navbar-nav">
+        <li><a href="/stats">Stats</a></li>
+      </ul>
     </div>
   </nav>
   <div class="col-xs-12 col-sm-12 col-md-6">
@@ -40,7 +43,7 @@
             <tr style="outline: thin solid black">
               <td></td>
               <th>Total</th>
-              <th style="text-align: right;" class={{if .check}}"bg-danger"{{else}}"bg-success"{{end}}>{{.curr | printf "%.2f"}} CHF</th>
+              <th style="text-align: right;" class={{if gt 0.0 .curr}}"bg-danger"{{else}}"bg-success"{{end}}>{{.curr | printf "%.2f"}} CHF</th>
             </tr>
           </tbody>
         </table>

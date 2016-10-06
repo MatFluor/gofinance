@@ -23,6 +23,7 @@ func main() {
 	// Setting up the routes - handlers in handlers.go
 	router := httprouter.New()
 	router.GET("/", renderMain)
+	router.GET("/stats", handleStats)
 	router.GET("/new/transaction", renderInsert)
 	router.GET("/new/fixed", renderNewFix)
 	router.GET("/edit/:type/:id", handleEdit)

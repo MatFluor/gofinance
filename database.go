@@ -230,6 +230,25 @@ func totalExpenses(db *sql.DB, period string) float64 {
 	return totalExpenses
 }
 
+func sumUp(db *sql.DB, period string) ([]string, []float64) {
+	var sqlRead string
+	var resultVals []float64
+	var resultStr []string
+	switch period {
+	case "daily":
+		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'weekday 1', '-7 days') GROUP BY valDay"
+	}
+	rows, _ := db.Query(sqlRead)
+	for rows.Next() {
+		var day string
+		var item float64
+		_ = rows.Scan(&day, &item)
+		resultVals = append(resultVals, item)
+		resultStr = append(resultStr, day)
+	}
+	return resultStr, resultVals
+}
+
 func currentMagic(db *sql.DB) float64 {
 	var magicNumber float64
 	sqlRead := `SELECT
@@ -237,13 +256,7 @@ func currentMagic(db *sql.DB) float64 {
 	(SELECT SUM(amount) FROM transactions
 	WHERE datetime(timestamp) >= DATE('now'))
 	AS magicnumber`
-	rows, err := db.Query(sqlRead)
-	defer rows.Close()
-	if err != nil {
-		panic(err)
-	}
-	for rows.Next() {
-		_ = rows.Scan(&magicNumber)
-	}
+	rows := db.QueryRow(sqlRead)
+	_ = rows.Scan(&magicNumber)
 	return magicNumber
 }

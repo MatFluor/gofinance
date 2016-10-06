@@ -16,6 +16,16 @@ import (
 // Make the DB global for all
 var db *sql.DB
 
+func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
+	t, _ := template.ParseFiles("templates/stats.html")
+	dayLabels, dayValues := sumUp(db, "daily")
+	magicNumber := baseMagic(db)
+	for i := 0; i < len(dayValues); i++ {
+		dayValues[i] = magicNumber - (dayValues[i] * -1)
+	}
+	t.Execute(w, map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues})
+}
+
 func handleEdit(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	t, _ := template.ParseFiles("templates/edit.html")
 	entryID := pr.ByName("id")
@@ -109,17 +119,13 @@ func renderMain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	// Read the Database to get the current stuff (Date = today)
 	fixed := ReadItem(db, "fixed")
 	trans := ReadItem(db, "transaction")
-	smallerThanZero := false
 	magicNumber := baseMagic(db)
 	currentNumber := currentMagic(db)
-	if currentNumber <= 0 {
-		smallerThanZero = true
-	}
 	weektotal := expensesPerPeriod("week")
 	monthtotal := expensesPerPeriod("month")
 	yeartotal := expensesPerPeriod("year")
 	t.Execute(w, map[string]interface{}{"fix": fixed, "tran": trans,
-		"mn": magicNumber, "curr": currentNumber, "check": smallerThanZero,
+		"mn": magicNumber, "curr": currentNumber,
 		"weektotal": weektotal, "monthtotal": monthtotal, "yeartotal": yeartotal})
 }
 
