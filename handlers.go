@@ -24,6 +24,7 @@ func handleCats(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func updateCats(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	r.ParseForm()
+	var cats []Category
 	for key, values := range r.Form { // range over map
 		keylist := strings.Split(key, "_")
 		for _, value := range values { // range over []string
@@ -33,14 +34,11 @@ func updateCats(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 			} else {
 				id = 0
 			}
-			UpdateCats(db, id, keylist[1], value)
+			nullID := ToNullInt64(id)
+			cats = append(cats, Category{ID: nullID, Description: keylist[1], Mapping: ToNullString(value)})
 		}
 	}
-	//income := false
-	//description := r.Form["description"][0]
-	//amountstr := r.Form["amount"][0]
-	//StoreItem(db, Transaction{Description: description, Amount: amount, Income: income, Recurrence: recurrence, Influence: influence}, "fixed")
-	// Get back to the main page
+	UpdateCats(db, cats)
 	http.Redirect(w, r, "/", 301)
 }
 

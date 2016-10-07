@@ -29,6 +29,23 @@ type Category struct {
 	Description string
 }
 
+// ToNullInt64 helper to convert from regular int
+func ToNullInt64(i int) sql.NullInt64 {
+	newI := int64(i)
+	return sql.NullInt64{Int64: newI, Valid: true}
+}
+
+// FromNullInt64 helper to convert that back
+func FromNullInt64(i sql.NullInt64) int64 {
+	newI := i.Int64
+	return newI
+}
+
+// ToNullString helper to convert into Nullstring
+func ToNullString(s string) sql.NullString {
+	return sql.NullString{String: s, Valid: s != ""}
+}
+
 func initDB(filepath string) *sql.DB {
 	db, err := sql.Open("sqlite3", filepath)
 	if err != nil {
@@ -86,24 +103,25 @@ func CreateTable(db *sql.DB) {
 }
 
 // UpdateCats Insert or Replace the categories
-func UpdateCats(db *sql.DB, id int, description string, mapping string) {
-	var newId int
+func UpdateCats(db *sql.DB, cats []Category) {
+	var newID int64
+	tx, _ := db.Begin()
 	sqlUpdate := "INSERT OR REPLACE INTO mappings (id, mapping, description)	VALUES (?, ?, ?)"
-	stmt, _ := db.Prepare(sqlUpdate)
-	// if id is null: SELECT MAX(id) FROM mappings
-	if id == 0 {
-		rows := db.QueryRow("SELECT MAX(id) FROM mappings")
-		_ = rows.Scan(&newId)
-		newId++
-
-	} else {
-		newId = id
+	stmt, _ := tx.Prepare(sqlUpdate)
+	for i := 0; i < len(cats); i++ {
+		if FromNullInt64(cats[i].ID) == 0 {
+			rows := db.QueryRow("SELECT MAX(id) FROM mappings")
+			_ = rows.Scan(&newID)
+			newID++
+		} else {
+			newID = FromNullInt64(cats[i].ID)
+		}
+		_, err2 := stmt.Exec(newID, cats[i].Mapping, cats[i].Description)
+		if err2 != nil {
+			panic(err2)
+		}
 	}
-	defer stmt.Close()
-	_, err2 := stmt.Exec(newId, mapping, description)
-	if err2 != nil {
-		panic(err2)
-	}
+	tx.Commit()
 }
 
 // StoreItem holds logic to insert a transaction
