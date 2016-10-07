@@ -23,28 +23,45 @@
       <a class="navbar-brand" href="/">GoFinance</a>
     </div>
   </nav>
-  <div class="col-xs-12 col-sm-12 col-md-6">
+  <div class="col-xs-12 col-sm-6 col-md-6">
     <div class="panel panel-info">
       <div class="panel-heading">
         <strong>This weeks expenses</strong>
       </div>
       <div class="panel-body">
-        <div class="ct-chart">
+        <div class="ct-chart" id="dayline">
         </div>
       </div>
     </div>
- </div>
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <strong>Expenses by category</strong>
+      </div>
+      <div class="panel-body">
+        <div class="ct-donut" id="donut">
+        </div>
+      </div>
+    </div>
+  </div>
  <script>
  var data = {
    labels: {{.dayLabels}},
    series: [
      {{.dayValues}},
-     [{{.magicnumber}},{{.magicnumber}},{{.magicnumber}},
-     {{.magicnumber}},{{.magicnumber}},{{.magicnumber}},
-   {{.magicnumber}}]
+     [0,0,0,0,0,0,0]
    ]
  };
-
+ var data2 = {
+   labels: {{.typeLabels}},
+   series:
+     {{.typeValues}}
+ };
+ var options2 = {
+   height: 200,
+   donut: true
+ }
 var options = {
   height: 200,
   onlyInteger: true,
@@ -53,6 +70,7 @@ var options = {
 lineSmooth: Chartist.Interpolation.simple({
     divisor: 2
   }),
+ new Chartist.Pie('.ct-donut', data2, options2);
  new Chartist.Line('.ct-chart', data, options);
  </script>
 </body>

@@ -19,11 +19,13 @@ var db *sql.DB
 func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	t, _ := template.ParseFiles("templates/stats.html")
 	dayLabels, dayValues := sumUp(db, "daily")
+	typeLabels, typeValues := sumUp(db, "type")
 	magicNumber := baseMagic(db)
 	for i := 0; i < len(dayValues); i++ {
 		dayValues[i] = magicNumber - (dayValues[i] * -1)
 	}
-	t.Execute(w, map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues, "magicnumber": magicNumber})
+	t.Execute(w, map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues,
+		"magicnumber": magicNumber, "typeLabels": typeLabels, "typeValues": typeValues})
 }
 
 func handleEdit(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {

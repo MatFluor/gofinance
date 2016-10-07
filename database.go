@@ -65,6 +65,17 @@ func CreateTable(db *sql.DB) {
 	if err2 != nil {
 		panic(err2)
 	}
+	sqlTable3 := `
+  CREATE TABLE IF NOT EXISTS mappings(
+    id INTEGER NOT NULL PRIMARY KEY,
+    mapping TEXT,
+    description TEXT
+    );
+    `
+	_, err3 := db.Exec(sqlTable3)
+	if err3 != nil {
+		panic(err3)
+	}
 }
 
 // StoreItem holds logic to insert a transaction
@@ -237,7 +248,10 @@ func sumUp(db *sql.DB, period string) ([]string, []float64) {
 	switch period {
 	case "daily":
 		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'weekday 1', '-7 days') GROUP BY valDay"
+	case "type":
+		sqlRead = "SELECT mapping, SUM(amount) FROM transactions JOIN mappings ON mappings.description = transactions.description GROUP BY mappings.mapping"
 	}
+
 	rows, _ := db.Query(sqlRead)
 	for rows.Next() {
 		var day string
