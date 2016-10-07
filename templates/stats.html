@@ -1,8 +1,6 @@
+{{ define "stats" }}
 <head>
-  <title>GoFinance</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" class="href">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  {{ template "header" }}
   <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
   <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 </head>
@@ -18,11 +16,7 @@
 
 </script>
 <body>
-  <nav class="navbar navbar-default">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">GoFinance</a>
-    </div>
-  </nav>
+  {{template "navbar"}}
   <div class="col-xs-12 col-sm-6 col-md-6">
     <div class="panel panel-info">
       <div class="panel-heading">
@@ -74,3 +68,4 @@ lineSmooth: Chartist.Interpolation.simple({
  new Chartist.Line('.ct-chart', data, options);
  </script>
 </body>
+{{ end }}

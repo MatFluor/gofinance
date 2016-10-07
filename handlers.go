@@ -16,20 +16,48 @@ import (
 // Make the DB global for all
 var db *sql.DB
 
+func handleCats(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	t, _ := template.ParseFiles("templates/editcategories.html", "templates/header.html")
+	items := getCategories(db)
+	t.ExecuteTemplate(w, "categories", items)
+}
+
+func updateCats(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	r.ParseForm()
+	for key, values := range r.Form { // range over map
+		keylist := strings.Split(key, "_")
+		for _, value := range values { // range over []string
+			var id int
+			if keylist[0] != "" {
+				id, _ = strconv.Atoi(keylist[0])
+			} else {
+				id = 0
+			}
+			UpdateCats(db, id, keylist[1], value)
+		}
+	}
+	//income := false
+	//description := r.Form["description"][0]
+	//amountstr := r.Form["amount"][0]
+	//StoreItem(db, Transaction{Description: description, Amount: amount, Income: income, Recurrence: recurrence, Influence: influence}, "fixed")
+	// Get back to the main page
+	http.Redirect(w, r, "/", 301)
+}
+
 func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
-	t, _ := template.ParseFiles("templates/stats.html")
+	t, _ := template.ParseFiles("templates/stats.html", "templates/header.html")
 	dayLabels, dayValues := sumUp(db, "daily")
 	typeLabels, typeValues := sumUp(db, "type")
 	magicNumber := baseMagic(db)
 	for i := 0; i < len(dayValues); i++ {
 		dayValues[i] = magicNumber - (dayValues[i] * -1)
 	}
-	t.Execute(w, map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues,
+	t.ExecuteTemplate(w, "stats", map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues,
 		"magicnumber": magicNumber, "typeLabels": typeLabels, "typeValues": typeValues})
 }
 
 func handleEdit(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
-	t, _ := template.ParseFiles("templates/edit.html")
+	t, _ := template.ParseFiles("templates/edit.html", "templates/header.html")
 	entryID := pr.ByName("id")
 	var entry int
 	entry, _ = strconv.Atoi(entryID)
@@ -41,7 +69,7 @@ func handleEdit(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	if pr.ByName("type") == "fixed" {
 		fixcheck = true
 	}
-	t.Execute(w, map[string]interface{}{"trans": trans, "transtype": pr.ByName("type"), "fixcheck": fixcheck})
+	t.ExecuteTemplate(w, "edit", map[string]interface{}{"trans": trans, "transtype": pr.ByName("type"), "fixcheck": fixcheck})
 }
 
 func editEntry(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
@@ -114,7 +142,7 @@ func getFixInput(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 // Handler to display the main page - with db-values
 func renderMain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	t, err := template.ParseFiles("templates/index.html")
+	t, err := template.ParseFiles("templates/index.html", "templates/header.html")
 	if err != nil {
 		panic(err)
 	}
@@ -126,25 +154,25 @@ func renderMain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	weektotal := expensesPerPeriod("week")
 	monthtotal := expensesPerPeriod("month")
 	yeartotal := expensesPerPeriod("year")
-	t.Execute(w, map[string]interface{}{"fix": fixed, "tran": trans,
+	t.ExecuteTemplate(w, "index", map[string]interface{}{"fix": fixed, "tran": trans,
 		"mn": magicNumber, "curr": currentNumber,
 		"weektotal": weektotal, "monthtotal": monthtotal, "yeartotal": yeartotal})
 }
 
 // Handler for the insertion
 func renderInsert(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	t, err := template.ParseFiles("templates/input.html")
+	t, err := template.ParseFiles("templates/input.html", "templates/header.html")
 	if err != nil {
 		panic(err)
 	}
-	t.Execute(w, "")
+	t.ExecuteTemplate(w, "input", "")
 }
 
 // Handler for the insertion
 func renderNewFix(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	t, err := template.ParseFiles("templates/inputfix.html")
+	t, err := template.ParseFiles("templates/inputfix.html", "templates/header.html")
 	if err != nil {
 		panic(err)
 	}
-	t.Execute(w, "")
+	t.ExecuteTemplate(w, "inputfix", "")
 }

@@ -27,9 +27,11 @@ func main() {
 	router.GET("/new/transaction", renderInsert)
 	router.GET("/new/fixed", renderNewFix)
 	router.GET("/edit/:type/:id", handleEdit)
+	router.GET("/categories", handleCats)
 	router.POST("/confirm/new/transaction", getInput)
 	router.POST("/confirm/edit/:type/:id", editEntry)
 	router.POST("/confirm/new/fixed", getFixInput)
+	router.POST("/confirm/categories", updateCats)
 	// Start the Webserver
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {

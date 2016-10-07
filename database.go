@@ -22,6 +22,13 @@ type Transaction struct {
 	Timestamp   time.Time
 }
 
+// Category basic struct
+type Category struct {
+	ID          sql.NullInt64
+	Mapping     sql.NullString
+	Description string
+}
+
 func initDB(filepath string) *sql.DB {
 	db, err := sql.Open("sqlite3", filepath)
 	if err != nil {
@@ -75,6 +82,27 @@ func CreateTable(db *sql.DB) {
 	_, err3 := db.Exec(sqlTable3)
 	if err3 != nil {
 		panic(err3)
+	}
+}
+
+// UpdateCats Insert or Replace the categories
+func UpdateCats(db *sql.DB, id int, description string, mapping string) {
+	var newId int
+	sqlUpdate := "INSERT OR REPLACE INTO mappings (id, mapping, description)	VALUES (?, ?, ?)"
+	stmt, _ := db.Prepare(sqlUpdate)
+	// if id is null: SELECT MAX(id) FROM mappings
+	if id == 0 {
+		rows := db.QueryRow("SELECT MAX(id) FROM mappings")
+		_ = rows.Scan(&newId)
+		newId++
+
+	} else {
+		newId = id
+	}
+	defer stmt.Close()
+	_, err2 := stmt.Exec(newId, mapping, description)
+	if err2 != nil {
+		panic(err2)
 	}
 }
 
@@ -261,6 +289,18 @@ func sumUp(db *sql.DB, period string) ([]string, []float64) {
 		resultStr = append(resultStr, day)
 	}
 	return resultStr, resultVals
+}
+
+func getCategories(db *sql.DB) []Category {
+	var result []Category
+	sqlRead := "SELECT mappings.id, mapping, description FROM transactions LEFT JOIN mappings USING (description) GROUP BY description"
+	rows, _ := db.Query(sqlRead)
+	for rows.Next() {
+		var item Category
+		_ = rows.Scan(&item.ID, &item.Mapping, &item.Description)
+		result = append(result, item)
+	}
+	return result
 }
 
 func currentMagic(db *sql.DB) float64 {
