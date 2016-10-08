@@ -5,13 +5,13 @@
   <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 </head>
 <style>
-.ct-label {
-  font-size: 15px;
+  .ct-label {
+    font-size: 15px;
+  }
 
-}
-.ct-series-b .ct-line{
-  stroke: #A9A9F5;
-}
+  .ct-series-b .ct-line {
+    stroke: #A9A9F5;
+  }
 </style>
 
 </script>
@@ -39,33 +39,43 @@
       </div>
     </div>
   </div>
- <script>
- var data = {
-   labels: {{.dayLabels}},
-   series: [
-     {{.dayValues}},
-     [0,0,0,0,0,0,0]
-   ]
- };
- var data2 = {
-   labels: {{.typeLabels}},
-   series:
-     {{.typeValues}}
- };
- var options2 = {
-   height: 200,
-   donut: true
- }
-var options = {
-  height: 200,
-  onlyInteger: true,
-  showArea: true
-}
-lineSmooth: Chartist.Interpolation.simple({
-    divisor: 2
-  }),
- new Chartist.Pie('.ct-donut', data2, options2);
- new Chartist.Line('.ct-chart', data, options);
- </script>
+  <script>
+    var data = {
+      labels: {
+        {.dayLabels
+        }
+      },
+      series: [{
+          {.dayValues
+          }
+        },
+        [0, 0, 0, 0, 0, 0, 0]
+      ]
+    };
+    var data2 = {
+      labels: {
+        {.typeLabels
+        }
+      },
+      series: {
+        {.typeValues
+        }
+      }
+    };
+    var options2 = {
+      height: 200,
+      donut: true
+    }
+    var options = {
+      height: 200,
+      onlyInteger: true,
+      showArea: true
+    }
+    lineSmooth: Chartist.Interpolation.simple({
+        divisor: 2
+      }),
+      new Chartist.Pie('.ct-donut', data2, options2);
+    new Chartist.Line('.ct-chart', data, options);
+  </script>
 </body>
 {{ end }}
