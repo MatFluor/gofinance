@@ -68,12 +68,13 @@
   </div>
 </div>
   <div class="col-xs-12 col-sm-12 col-md-6">
-    <div class="panel panel-info">
+    <div class="panel panel-info" style="overflow: hidden;">
       <div class="panel-heading">
        <strong>Fixed income / expenses</strong>
       </div>
       <div class="panel-body">
-        <table class="table table-bordered table-hover table-responsive">
+        <div class="table-responsive">
+        <table class="table table-bordered table-hover">
           <thead>
             <tr>
               <th>Edit</th>
@@ -95,6 +96,7 @@
         {{end}}
       </tbody>
     </table>
+  </div>
         <a href="/new/fixed" class="btn btn-primary" role="button">Insert new fixed expense</a>
       </div>
     </div>
