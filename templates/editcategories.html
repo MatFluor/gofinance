@@ -4,17 +4,17 @@
 </head>
 <body>
   {{ template "navbar" }}
-  <div class="col-xs-12 col-sm-12 col-md-6">
+  <div class="container col-xs-12 col-sm-12 col-md-6">
     <form class="form-horizontal" action="/confirm/categories" method="post">
       <legend>Manage categorization</legend>
-      <div class="form-group">
         {{ range . }}
-        <label for="description" class="control-label col-xs-2">{{.Description}}</label>
-        <div class="col-xs-10">
+        <div class="form-group row">
+        <label for="description" class="col-sm-2 col-form-label">{{.Description}}</label>
+        <div class="col-sm-10">
           <input type="text" class="form-control" name="{{.ID.Value}}_{{.Description}}" id="description" {{if .Mapping.Value}}value="{{.Mapping.Value}}"{{else}}placeholder="Missing description"{{end}}>
         </div>
-        {{ end }}
       </div>
+        {{ end }}
       <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
           <input type="submit" class="btn btn-info" value="Send">
