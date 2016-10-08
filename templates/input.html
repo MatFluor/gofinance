@@ -4,28 +4,28 @@
 </head>
 <body>
   {{template "navbar"}}
-  <div class="col-xs-12 col-sm-12 col-md-6">
+  <div class="container col-xs-12 col-sm-12 col-md-6">
     <form class="form-horizontal" action="/confirm/new/transaction" method="post">
       <legend>Enter new expense</legend>
-      <div class="form-group">
-        <label for="description" class="control-label col-xs-2">Description</label>
-        <div class="col-xs-10">
+      <div class="form-group row">
+        <label for="description" class="col-form-label col-sm-2">Description</label>
+        <div class="col-sm-10">
           <input type="text" class="form-control" name="description" id="description" placeholder="Description">
         </div>
       </div>
-      <div class="form-group">
-        <label for="amount" class="control-label col-xs-2">Amount</label>
-        <div class="col-xs-10">
+      <div class="form-group row">
+        <label for="amount" class="col-form-label col-sm-2">Amount</label>
+        <div class="col-sm-10">
           <input type="number" step="any" class="form-control" name="amount" id="amount" placeholder="e.g. 12.5">
         </div>
       </div>
       <div class="form-group">
-        <div class="col-xs-offset-2 col-xs-10">
+        <div class="col-sm-offset-2 col-sm-10">
           <label><input type="checkbox" name="income"> Is income?</label>
         </div>
       </div>
       <div class="form-group">
-      <div class="col-xs-offset-2 col-xs-10">
+      <div class="col-sm-offset-2 col-sm-10">
         <input type="submit" class="btn btn-info" value="Send">
         <a href="/" class="btn btn-danger" role="button">Cancel</a>
       </div>
