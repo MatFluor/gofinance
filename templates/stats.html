@@ -34,37 +34,25 @@
         <strong>Expenses by category</strong>
       </div>
       <div class="panel-body">
-        <div class="ct-donut" id="donut">
+        <div class="ct-chart" id="categories">
         </div>
       </div>
     </div>
   </div>
   <script>
     var data = {
-      labels: {
-        {.dayLabels
-        }
-      },
-      series: [{
-          {.dayValues
-          }
-        },
+      labels: {{.dayLabels}},
+      series: [{{.dayValues}},
         [0, 0, 0, 0, 0, 0, 0]
       ]
     };
     var data2 = {
-      labels: {
-        {.typeLabels
-        }
-      },
-      series: {
-        {.typeValues
-        }
-      }
+      labels: {{.typeLabels}},
+      series: {{.typeValues}}
     };
     var options2 = {
       height: 200,
-      donut: true
+      distributeSeries: true,
     }
     var options = {
       height: 200,
@@ -74,8 +62,8 @@
     lineSmooth: Chartist.Interpolation.simple({
         divisor: 2
       }),
-      new Chartist.Pie('.ct-donut', data2, options2);
-    new Chartist.Line('.ct-chart', data, options);
+      new Chartist.Bar('#categories', data2, options2);
+    new Chartist.Line('#dayline', data, options);
   </script>
 </body>
 {{ end }}

@@ -105,13 +105,13 @@ func CreateTable(db *sql.DB) {
 // UpdateCats Insert or Replace the categories
 func UpdateCats(db *sql.DB, cats []Category) {
 	var newID int64
+	rows := db.QueryRow("SELECT MAX(id) FROM mappings")
+	_ = rows.Scan(&newID)
 	tx, _ := db.Begin()
 	sqlUpdate := "INSERT OR REPLACE INTO mappings (id, mapping, description)	VALUES (?, ?, ?)"
 	stmt, _ := tx.Prepare(sqlUpdate)
 	for i := 0; i < len(cats); i++ {
 		if FromNullInt64(cats[i].ID) == 0 {
-			rows := db.QueryRow("SELECT MAX(id) FROM mappings")
-			_ = rows.Scan(&newID)
 			newID++
 		} else {
 			newID = FromNullInt64(cats[i].ID)
