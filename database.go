@@ -132,12 +132,12 @@ func SumSummary(db *sql.DB, period string) []Entry {
 }
 
 func SumByCats(db *sql.DB, category string) []Entry {
-	sqlQuery := "SELECT description, sum(amount) FROM mappings JOIN transactions USING (description) WHERE mapping = ? GROUP BY description"
+	sqlQuery := "SELECT strftime('%d.%m.%Y', timestamp), description, sum(amount) FROM mappings JOIN transactions USING (description) WHERE mapping = ? GROUP BY description"
 	rows, _ := db.Query(sqlQuery, category)
 	var entries []Entry
 	for rows.Next() {
 		var item Entry
-		_ = rows.Scan(&item.Description, &item.Amount)
+		_ = rows.Scan(&item.Date, &item.Description, &item.Amount)
 		entries = append(entries, item)
 	}
 	return entries

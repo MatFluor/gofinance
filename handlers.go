@@ -19,13 +19,13 @@ var db *sql.DB
 func handleStatsDetails(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	t, _ := template.ParseFiles("templates/details.html", "templates/header.html")
 	data := SumByCats(db, pr.ByName("type"))
-	t.ExecuteTemplate(w, "details", map[string]interface{}{"data": data, "type": pr.ByName("type"), "date": false})
+	t.ExecuteTemplate(w, "details", map[string]interface{}{"data": data, "type": pr.ByName("type"), "mapping": false})
 }
 
 func handleSummaryDetails(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	t, _ := template.ParseFiles("templates/details.html", "templates/header.html")
 	data := SumSummary(db, pr.ByName("type"))
-	t.ExecuteTemplate(w, "details", map[string]interface{}{"data": data, "type": pr.ByName("type"), "date": true})
+	t.ExecuteTemplate(w, "details", map[string]interface{}{"data": data, "type": pr.ByName("type"), "mapping": true})
 }
 
 func handleCats(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

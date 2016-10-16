@@ -12,10 +12,10 @@
       <div class="panel-body">
     <table class="table datatable table-bordered table-hover">
       <thead>
-        {{if .date}}
         <th>
           Date
         </th>
+        {{if .mapping}}
         <th>
           Category
         </th>
@@ -30,10 +30,10 @@
       <tbody>
         {{range .data}}
         <tr>
-          {{if $.date}}
           <td>
             {{.Date}}
           </td>
+          {{if $.mapping}}
           <td>
             {{.Mapping}}
           </td>
