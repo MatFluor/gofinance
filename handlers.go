@@ -16,6 +16,12 @@ import (
 // Make the DB global for all
 var db *sql.DB
 
+func handleStatsDetails(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
+	t, _ := template.ParseFiles("templates/details.html", "templates/header.html")
+	data := SumByCats(db, pr.ByName("type"))
+	t.ExecuteTemplate(w, "details", map[string]interface{}{"data": data, "type": pr.ByName("type")})
+}
+
 func handleCats(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	t, _ := template.ParseFiles("templates/editcategories.html", "templates/header.html")
 	items := getCategories(db)

@@ -1,0 +1,39 @@
+{{ define "details" }}
+<head>
+  {{ template "header" }}
+</head>
+<body>
+  {{template "navbar"}}
+  <div class="container col-xs-12 col-sm-12 col-md-6">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+      <strong>{{.type}}</strong>
+      </div>
+      <div class="panel-body">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <th>
+        Description
+        </th>
+        <th>
+          Amount
+        </th>
+      </thead>
+      <tbody>
+        {{range .data}}
+        <tr>
+          <td>
+            {{.Description}}
+          </td>
+          <td align="right">
+            {{.Amount | printf "%.2f"}} CHF
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</body>
+{{end}}

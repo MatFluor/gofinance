@@ -30,6 +30,12 @@ type Category struct {
 	Description string
 }
 
+// Single Entry struct
+type Entry struct {
+	Description string
+	Amount      float64
+}
+
 // ToNullInt64 helper to convert from regular int
 func ToNullInt64(i int) sql.NullInt64 {
 	newI := int64(i)
@@ -101,6 +107,18 @@ func CreateTable(db *sql.DB) {
 	if err3 != nil {
 		panic(err3)
 	}
+}
+
+func SumByCats(db *sql.DB, category string) []Entry {
+	sqlQuery := "SELECT description, sum(amount) FROM mappings JOIN transactions USING (description) WHERE mapping = ? GROUP BY description"
+	rows, _ := db.Query(sqlQuery, category)
+	var entries []Entry
+	for rows.Next() {
+		var item Entry
+		_ = rows.Scan(&item.Description, &item.Amount)
+		entries = append(entries, item)
+	}
+	return entries
 }
 
 // UpdateCats Insert or Replace the categories

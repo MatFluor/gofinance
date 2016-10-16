@@ -45,7 +45,7 @@
             {{range .types}}
             <tr>
               <td>
-                {{.Descr}}
+                <a href="/stats/{{.Descr}}">{{.Descr}}</a>
               </td>
               <td align="right">
                 {{.Val | printf "%.2f"}}
