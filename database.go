@@ -32,6 +32,8 @@ type Category struct {
 
 // Single Entry struct
 type Entry struct {
+	Date        string
+	Mapping     string
 	Description string
 	Amount      float64
 }
@@ -107,6 +109,26 @@ func CreateTable(db *sql.DB) {
 	if err3 != nil {
 		panic(err3)
 	}
+}
+
+func SumSummary(db *sql.DB, period string) []Entry {
+	var sqlQuery string
+	switch period {
+	case "week":
+		sqlQuery = "SELECT strftime('%d.%m.%Y', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'weekday 1', '-7 days') ORDER BY time"
+	case "month":
+		sqlQuery = "SELECT strftime('%d.%m.%Y', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'start of month') ORDER BY time"
+	case "year":
+		sqlQuery = "SELECT strftime('%d.%m.%Y', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'start of year') ORDER BY time"
+	}
+	var entries []Entry
+	rows, _ := db.Query(sqlQuery)
+	for rows.Next() {
+		var item Entry
+		_ = rows.Scan(&item.Date, &item.Mapping, &item.Description, &item.Amount)
+		entries = append(entries, item)
+	}
+	return entries
 }
 
 func SumByCats(db *sql.DB, category string) []Entry {

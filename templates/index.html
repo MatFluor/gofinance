@@ -50,15 +50,15 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>This Week:</th>
+                <th><a href="/summary/week">This Week:</a></th>
                 <th class={{if gt 0.0 .weektotal }} "bg-danger"{{else}} "bg-success"{{end}}>{{.weektotal | printf "%.2f"}}</th>
               </tr>
               <tr>
-                <th>This Month:</th>
+                <th><a href="/summary/month">This Month:</a></th>
                 <th class={{if gt 0.0 .monthtotal }} "bg-danger"{{else}} "bg-success"{{end}}>{{.monthtotal | printf "%.2f"}}</th>
               </tr>
               <tr>
-                <th>This Year:</th>
+                <th><a href="/summary/year">This Year:</a></th>
                 <th class={{if gt 0.0 .yeartotal }} "bg-danger"{{else}} "bg-success"{{end}}>{{.yeartotal | printf "%.2f"}}</th>
               </tr>
             </tbody>

@@ -7,11 +7,19 @@
   <div class="container col-xs-12 col-sm-12 col-md-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-      <strong>{{.type}}</strong>
+      <strong>Transactions in {{.type}}</strong>
       </div>
       <div class="panel-body">
-    <table class="table table-bordered table-hover">
+    <table class="table datatable table-bordered table-hover">
       <thead>
+        {{if .date}}
+        <th>
+          Date
+        </th>
+        <th>
+          Category
+        </th>
+        {{end}}
         <th>
         Description
         </th>
@@ -22,6 +30,14 @@
       <tbody>
         {{range .data}}
         <tr>
+          {{if $.date}}
+          <td>
+            {{.Date}}
+          </td>
+          <td>
+            {{.Mapping}}
+          </td>
+          {{end}}
           <td>
             {{.Description}}
           </td>

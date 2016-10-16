@@ -29,6 +29,7 @@ func main() {
 	router.GET("/edit/:type/:id", handleEdit)
 	router.GET("/stats/:type", handleStatsDetails)
 	router.GET("/categories", handleCats)
+	router.GET("/summary/:type", handleSummaryDetails)
 	router.POST("/confirm/new/transaction", getInput)
 	router.POST("/confirm/edit/:type/:id", editEntry)
 	router.POST("/confirm/new/fixed", getFixInput)
