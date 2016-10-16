@@ -50,8 +50,17 @@ func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	for i := 0; i < len(dayValues); i++ {
 		dayValues[i] = magicNumber - (dayValues[i] * -1)
 	}
+	// Slice of slices for the table
+	type category struct {
+		Descr string
+		Val   float64
+	}
+	var catList []category
+	for i := 0; i < len(typeLabels); i++ {
+		catList = append(catList, category{Descr: typeLabels[i], Val: typeValues[i]})
+	}
 	t.ExecuteTemplate(w, "stats", map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues,
-		"magicnumber": magicNumber, "typeLabels": typeLabels, "typeValues": typeValues})
+		"magicnumber": magicNumber, "types": catList})
 }
 
 func handleEdit(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {

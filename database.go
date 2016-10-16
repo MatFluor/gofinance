@@ -6,6 +6,7 @@ package main
 
 import (
 	"database/sql"
+	"strconv"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -113,13 +114,18 @@ func UpdateCats(db *sql.DB, cats []Category) {
 	for i := 0; i < len(cats); i++ {
 		if FromNullInt64(cats[i].ID) == 0 {
 			newID++
+			_, err2 := stmt.Exec(newID, cats[i].Mapping, cats[i].Description)
+			if err2 != nil {
+				panic(err2)
+			}
 		} else {
-			newID = FromNullInt64(cats[i].ID)
+			replID := FromNullInt64(cats[i].ID)
+			_, err2 := stmt.Exec(replID, cats[i].Mapping, cats[i].Description)
+			if err2 != nil {
+				panic(err2)
+			}
 		}
-		_, err2 := stmt.Exec(newID, cats[i].Mapping, cats[i].Description)
-		if err2 != nil {
-			panic(err2)
-		}
+
 	}
 	tx.Commit()
 }
@@ -295,23 +301,38 @@ func sumUp(db *sql.DB, period string) ([]string, []float64) {
 	case "daily":
 		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'weekday 1', '-7 days') GROUP BY valDay"
 	case "type":
-		sqlRead = "SELECT mapping, SUM(amount) FROM transactions JOIN mappings ON mappings.description = transactions.description GROUP BY mappings.mapping"
+		sqlRead = "SELECT mapping, SUM(amount) FROM transactions JOIN mappings ON mappings.description = transactions.description GROUP BY mappings.mapping ORDER BY SUM(amount)"
+	case "yearly":
+		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'start of year') GROUP BY valDay"
 	}
 
 	rows, _ := db.Query(sqlRead)
+	// For checking if there is an empty day (no transactions) - then get MN
+	var dayholder int
 	for rows.Next() {
 		var day string
 		var item float64
 		_ = rows.Scan(&day, &item)
+		if dayholder == 0 {
+			dayholder, _ = strconv.Atoi(day)
+		}
+		daycheck, _ := strconv.Atoi(day)
+		if daycheck >= dayholder+1 {
+			newday := strconv.Itoa(dayholder)
+			newitem := 0.0
+			resultVals = append(resultVals, newitem)
+			resultStr = append(resultStr, newday)
+		}
 		resultVals = append(resultVals, item)
 		resultStr = append(resultStr, day)
+		dayholder++
 	}
 	return resultStr, resultVals
 }
 
 func getCategories(db *sql.DB) []Category {
 	var result []Category
-	sqlRead := "SELECT mappings.id, mapping, description FROM transactions LEFT JOIN mappings USING (description) GROUP BY description"
+	sqlRead := "SELECT mappings.id, mapping, description FROM transactions LEFT JOIN mappings USING (description) GROUP BY description ORDER BY mapping"
 	rows, _ := db.Query(sqlRead)
 	for rows.Next() {
 		var item Category
@@ -324,8 +345,8 @@ func getCategories(db *sql.DB) []Category {
 func currentMagic(db *sql.DB) float64 {
 	var magicNumber float64
 	sqlRead := `SELECT
-	(SELECT SUM(influence) FROM fixed) +
-	(SELECT SUM(amount) FROM transactions
+	(SELECT TOTAL(influence) FROM fixed) +
+	(SELECT TOTAL(amount) FROM transactions
 	WHERE datetime(timestamp) >= DATE('now'))
 	AS magicnumber`
 	rows := db.QueryRow(sqlRead)

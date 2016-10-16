@@ -34,7 +34,25 @@
         <strong>Expenses by category</strong>
       </div>
       <div class="panel-body">
-        <div class="ct-chart" id="categories">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .types}}
+            <tr>
+              <td>
+                {{.Descr}}
+              </td>
+              <td align="right">
+                {{.Val | printf "%.2f"}}
+              </td>
+              {{end}}
+            </tr>
+          </tbody>
         </div>
       </div>
     </div>
@@ -46,14 +64,6 @@
         [0, 0, 0, 0, 0, 0, 0]
       ]
     };
-    var data2 = {
-      labels: {{.typeLabels}},
-      series: {{.typeValues}}
-    };
-    var options2 = {
-      height: 200,
-      distributeSeries: true,
-    }
     var options = {
       height: 200,
       onlyInteger: true,
@@ -62,7 +72,6 @@
     lineSmooth: Chartist.Interpolation.simple({
         divisor: 2
       }),
-      new Chartist.Bar('#categories', data2, options2);
     new Chartist.Line('#dayline', data, options);
   </script>
 </body>
