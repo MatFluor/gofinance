@@ -132,7 +132,7 @@ func SumSummary(db *sql.DB, period string) []Entry {
 }
 
 func SumByCats(db *sql.DB, category string) []Entry {
-	sqlQuery := "SELECT strftime('%d.%m.%Y', timestamp), description, sum(amount) FROM mappings JOIN transactions USING (description) WHERE mapping = ? GROUP BY description"
+	sqlQuery := "SELECT strftime('%d.%m.%Y', timestamp), description, sum(amount) FROM mappings JOIN transactions USING (description) WHERE mapping = ? AND timestamp >= date('now', 'start of year') GROUP BY description"
 	rows, _ := db.Query(sqlQuery, category)
 	var entries []Entry
 	for rows.Next() {
@@ -341,7 +341,7 @@ func sumUp(db *sql.DB, period string) ([]string, []float64) {
 	case "daily":
 		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'weekday 1', '-7 days') GROUP BY valDay"
 	case "type":
-		sqlRead = "SELECT mapping, SUM(amount) FROM transactions JOIN mappings ON mappings.description = transactions.description GROUP BY mappings.mapping ORDER BY SUM(amount)"
+		sqlRead = "SELECT mapping, SUM(amount) FROM transactions JOIN mappings ON mappings.description = transactions.description WHERE timestamp >= date('now', 'start of year') GROUP BY mappings.mapping ORDER BY SUM(amount)"
 	case "yearly":
 		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'start of year') GROUP BY valDay"
 	}
