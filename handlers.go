@@ -56,10 +56,19 @@ func updateCats(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	t, _ := template.ParseFiles("templates/stats.html", "templates/header.html")
-	dayLabels, dayValues := sumUp(db, "daily")
-	typeLabels, typeValues := sumUp(db, "type")
-	magicNumber := baseMagic(db)
+	// Get labels and values for stats concurrently
+	daylabelchan := make(chan []string)
+	dayvalchan := make(chan []float64)
+	typelabelchan := make(chan []string)
+	typevalchan := make(chan []float64)
+	go sumUp(db, "daily", daylabelchan, dayvalchan)
+	go sumUp(db, "type", typelabelchan, typevalchan)
+	dayLabels := <-daylabelchan
+	dayValues := <-dayvalchan
+	typeLabels := <-typelabelchan
+	typeValues := <-typevalchan
 	// Calculate the correct numbers by day
+	magicNumber := baseMagic(db)
 	for i := 0; i < len(dayValues); i++ {
 		dayValues[i] = magicNumber - (dayValues[i] * -1)
 	}
@@ -172,9 +181,15 @@ func renderMain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	trans := ReadItem(db, "transaction")
 	magicNumber := baseMagic(db)
 	currentNumber := currentMagic(db)
-	weektotal := expensesPerPeriod("week")
-	monthtotal := expensesPerPeriod("month")
-	yeartotal := expensesPerPeriod("year")
+	weekchan := make(chan float64)
+	monthchan := make(chan float64)
+	yearchan := make(chan float64)
+	go expensesPerPeriod("week", weekchan)
+	go expensesPerPeriod("month", monthchan)
+	go expensesPerPeriod("year", yearchan)
+	weektotal := <-weekchan
+	monthtotal := <-monthchan
+	yeartotal := <-yearchan
 	t.ExecuteTemplate(w, "index", map[string]interface{}{"fix": fixed, "tran": trans,
 		"mn": magicNumber, "curr": currentNumber,
 		"weektotal": weektotal, "monthtotal": monthtotal, "yeartotal": yeartotal})

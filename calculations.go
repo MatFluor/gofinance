@@ -44,7 +44,7 @@ func daysInYear(year int) float64 {
 }
 
 // Days in since beginning of week
-func expensesPerPeriod(period string) float64 {
+func expensesPerPeriod(period string, channel chan float64) {
 	expenses := totalExpenses(db, period)
 	magicNumber := baseMagic(db)
 	var total float64
@@ -56,5 +56,5 @@ func expensesPerPeriod(period string) float64 {
 	case "year":
 		total = (magicNumber * daysInYear(time.Now().Year())) + expenses
 	}
-	return total
+	channel <- total
 }

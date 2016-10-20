@@ -333,7 +333,7 @@ func totalExpenses(db *sql.DB, period string) float64 {
 	return totalExpenses
 }
 
-func sumUp(db *sql.DB, period string) ([]string, []float64) {
+func sumUp(db *sql.DB, period string, labelchan chan []string, valchan chan []float64) {
 	var sqlRead string
 	var resultVals []float64
 	var resultStr []string
@@ -369,7 +369,8 @@ func sumUp(db *sql.DB, period string) ([]string, []float64) {
 		resultStr = append(resultStr, day)
 		dayholder++
 	}
-	return resultStr, resultVals
+	labelchan <- resultStr
+	valchan <- resultVals
 }
 
 func getCategories(db *sql.DB) []Category {
