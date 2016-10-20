@@ -342,6 +342,8 @@ func sumUp(db *sql.DB, period string) ([]string, []float64) {
 		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'weekday 1', '-7 days') GROUP BY valDay"
 	case "type":
 		sqlRead = "SELECT mapping, SUM(amount) FROM transactions JOIN mappings ON mappings.description = transactions.description GROUP BY mappings.mapping ORDER BY SUM(amount)"
+	case "monthly":
+		sqlRead = "SELECT strftime('%m', timestamp) as valMonth, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'start of year') GROUP BY valMonth"
 	case "yearly":
 		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'start of year') GROUP BY valDay"
 	}

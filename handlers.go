@@ -59,6 +59,7 @@ func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	dayLabels, dayValues := sumUp(db, "daily")
 	typeLabels, typeValues := sumUp(db, "type")
 	magicNumber := baseMagic(db)
+	// Calculate the correct numbers by day
 	for i := 0; i < len(dayValues); i++ {
 		dayValues[i] = magicNumber - (dayValues[i] * -1)
 	}
@@ -67,6 +68,7 @@ func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 		Descr string
 		Val   float64
 	}
+	// Get the categories and sum them up to display in the table
 	var catList []category
 	for i := 0; i < len(typeLabels); i++ {
 		catList = append(catList, category{Descr: typeLabels[i], Val: typeValues[i]})
