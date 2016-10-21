@@ -2,7 +2,7 @@
 <head>
   {{ template "header" }}
   <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-  <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
 </head>
 <style>
   .ct-label {
@@ -23,7 +23,8 @@
         <strong>This weeks expenses</strong>
       </div>
       <div class="panel-body">
-        <div class="ct-chart" id="dayline">
+        <div class="ct-chart">
+          <canvas id="dayline"></canvas>
         </div>
       </div>
     </div>
@@ -58,21 +59,28 @@
     </div>
   </div>
   <script>
-    var data = {
+  var ctx = $("#dayline")
+  var data = {
       labels: {{.dayLabels}},
-      series: [{{.dayValues}},
-        [0, 0, 0, 0, 0, 0, 0]
-      ]
-    };
-    var options = {
-      height: 200,
-      onlyInteger: true,
-      showArea: true
+      datasets: [
+          {
+            label: "Ausgaben",
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: 'round',
+            data: {{.dayValues}},
     }
-    lineSmooth: Chartist.Interpolation.simple({
-        divisor: 2
-      }),
-    new Chartist.Line('#dayline', data, options);
+    ],
+      }
+    // var options = {
+    //   height: 200,
+    //   onlyInteger: true,
+    //   showArea: true
+    // }
+    // lineSmooth: Chartist.Interpolation.simple({
+    //     divisor: 2
+    //   })
+    new Chart(ctx, {type: 'line', data:data});
   </script>
 </body>
 {{ end }}
