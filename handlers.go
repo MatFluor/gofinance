@@ -1,5 +1,5 @@
 /*
-This file holds all the handlers - to keep the mein go file a bit cleaner
+This file holds all the handlers - to keep the main go file a bit cleaner
 */
 package main
 
@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -58,6 +59,7 @@ func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	t, _ := template.ParseFiles("templates/stats.html", "templates/header.html")
 	dayLabels, dayValues := sumUp(db, "daily")
 	typeLabels, typeValues := sumUp(db, "type")
+	monLabels, monValues := sumUp(db, "monthly")
 	magicNumber := baseMagic(db)
 	// Calculate the correct numbers by day
 	for i := 0; i < len(dayValues); i++ {
@@ -65,16 +67,31 @@ func handleStats(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	}
 	// Slice of slices for the table
 	type category struct {
-		Descr string
-		Val   float64
+		Descr   string
+		Val     float64
+		Percent float64
+	}
+	// Calculate the percentage for each category
+	var totalamount float64
+	for _, val := range typeValues {
+		if val < 0 {
+			val *= -1
+		}
+		totalamount += val
 	}
 	// Get the categories and sum them up to display in the table
 	var catList []category
 	for i := 0; i < len(typeLabels); i++ {
-		catList = append(catList, category{Descr: typeLabels[i], Val: typeValues[i]})
+		percentage := percentages(totalamount, typeValues[i])
+		catList = append(catList, category{Descr: typeLabels[i], Val: typeValues[i], Percent: percentage})
+	}
+	for i, val := range monLabels {
+		monInt, _ := strconv.Atoi(val)
+		numdays := daysInMonth(time.Now().Year(), time.Month(monInt))
+		monValues[i] = monValues[i] + float64(numdays)*magicNumber
 	}
 	t.ExecuteTemplate(w, "stats", map[string]interface{}{"dayLabels": dayLabels, "dayValues": dayValues,
-		"magicnumber": magicNumber, "types": catList})
+		"magicnumber": magicNumber, "types": catList, "monLabels": monLabels, "monValues": monValues})
 }
 
 func handleEdit(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {

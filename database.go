@@ -56,14 +56,14 @@ func ToNullString(s string) sql.NullString {
 }
 
 func initDB(filepath string) *sql.DB {
-	db, err := sql.Open("sqlite3", filepath)
+	database, err := sql.Open("sqlite3", filepath)
 	if err != nil {
 		panic(err)
 	}
-	if db == nil {
+	if database == nil {
 		panic("db nil")
 	}
-	return db
+	return database
 }
 
 // CreateTable to intialize the database

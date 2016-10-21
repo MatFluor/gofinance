@@ -7,7 +7,7 @@ package main
 import "time"
 
 // Calculates the so-called "Magic Number"
-// The daily amount of money you can spend
+// The daily amount of money you can spend for a signle fixed expense/income
 func calcRate(trans Transaction) float64 {
 	magicAdd := 0.0
 	switch trans.Recurrence {
@@ -43,7 +43,7 @@ func daysInYear(year int) float64 {
 	return numdays
 }
 
-// Days in since beginning of week
+// Calculates the total expenses per period
 func expensesPerPeriod(period string) float64 {
 	expenses := totalExpenses(db, period)
 	magicNumber := baseMagic(db)
@@ -57,4 +57,11 @@ func expensesPerPeriod(period string) float64 {
 		total = (magicNumber * daysInYear(time.Now().Year())) + expenses
 	}
 	return total
+}
+
+func percentages(total, transam float64) float64 {
+	if transam < 0 {
+		transam *= -1
+	}
+	return (transam * 100) / total
 }
