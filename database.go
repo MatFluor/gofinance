@@ -56,14 +56,14 @@ func ToNullString(s string) sql.NullString {
 }
 
 func initDB(filepath string) *sql.DB {
-	db, err := sql.Open("sqlite3", filepath)
+	database, err := sql.Open("sqlite3", filepath)
 	if err != nil {
 		panic(err)
 	}
-	if db == nil {
+	if database == nil {
 		panic("db nil")
 	}
-	return db
+	return database
 }
 
 // CreateTable to intialize the database
@@ -115,11 +115,11 @@ func SumSummary(db *sql.DB, period string) []Entry {
 	var sqlQuery string
 	switch period {
 	case "week":
-		sqlQuery = "SELECT strftime('%d.%m.%Y', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'weekday 1', '-7 days') ORDER BY time"
+		sqlQuery = "SELECT strftime('%Y-%m-%d', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'weekday 1', '-7 days') ORDER BY time"
 	case "month":
-		sqlQuery = "SELECT strftime('%d.%m.%Y', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'start of month') ORDER BY time"
+		sqlQuery = "SELECT strftime('%Y-%m-%d', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'start of month') ORDER BY time"
 	case "year":
-		sqlQuery = "SELECT strftime('%d.%m.%Y', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'start of year') ORDER BY time"
+		sqlQuery = "SELECT strftime('%Y-%m-%d', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'start of year') ORDER BY time"
 	}
 	var entries []Entry
 	rows, _ := db.Query(sqlQuery)
@@ -132,7 +132,7 @@ func SumSummary(db *sql.DB, period string) []Entry {
 }
 
 func SumByCats(db *sql.DB, category string) []Entry {
-	sqlQuery := "SELECT strftime('%d.%m.%Y', timestamp), description, sum(amount) FROM mappings JOIN transactions USING (description) WHERE mapping = ? GROUP BY description"
+	sqlQuery := "SELECT strftime('%Y-%m-%d', timestamp), description, sum(amount) FROM mappings JOIN transactions USING (description) WHERE mapping = ? AND timestamp >= date('now', 'start of year') GROUP BY description"
 	rows, _ := db.Query(sqlQuery, category)
 	var entries []Entry
 	for rows.Next() {

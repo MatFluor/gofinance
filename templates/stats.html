@@ -22,9 +22,17 @@
         <strong>This weeks expenses</strong>
       </div>
       <div class="panel-body">
-        <div class="ct-chart">
-          <canvas id="dayline"></canvas>
-        </div>
+          <canvas id="weekline"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-6">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <strong>All months expenses</strong>
+      </div>
+      <div class="panel-body">
+          <canvas id="monthbars"></canvas>
       </div>
     </div>
   </div>
@@ -39,6 +47,7 @@
             <tr>
               <th>Category</th>
               <th>Amount</th>
+              <th>Percentage of Total</th>
             </tr>
           </thead>
           <tbody>
@@ -50,6 +59,9 @@
               <td align="right">
                 {{.Val | printf "%.2f"}}
               </td>
+              <td align="right">
+                {{.Percent | printf "%.2f"}}
+              </td>
               {{end}}
             </tr>
           </tbody>
@@ -58,18 +70,31 @@
     </div>
   </div>
   <script>
-  var ctx = $("#dayline")
+  var weekline = $("#weekline")
   var data = {
       labels: {{.dayLabels}},
       datasets: [
           {
-            label: "Ausgaben",
+            label: "Expenses",
             backgroundColor: "rgba(75,192,192,0.4)",
             borderColor: "rgba(75,192,192,1)",
             borderCapStyle: 'round',
             data: {{.dayValues}},
+          }
+      ],
     }
-    ],
+    var monthbars = $("#monthbars")
+    var data2 = {
+        labels: {{.monLabels}},
+        datasets: [
+            {
+              label: "Unused Magic",
+              backgroundColor: "rgba(153, 102, 255, 0.2)",
+              borderColor: "rgba(153, 102, 255, 1)",
+              borderWidth: 2,
+              data: {{.monValues}},
+            }
+        ],
       }
     // var options = {
     //   height: 200,
@@ -79,7 +104,8 @@
     // lineSmooth: Chartist.Interpolation.simple({
     //     divisor: 2
     //   })
-    new Chart(ctx, {type: 'line', data:data});
+    new Chart(weekline, {type: 'line', data:data});
+    new Chart(monthbars, {type: 'bar', data:data2});
   </script>
 </body>
 {{ end }}
