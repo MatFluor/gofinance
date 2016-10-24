@@ -1,7 +1,7 @@
 ![Image](banner.png)
 
 
-# GoFinance [![Build Status](https://travis-ci.org/MatFluor/gofinance.svg?branch=master)](https://travis-ci.org/MatFluor/gofinance)
+# GoFinance [![Build Status](https://travis-ci.org/MatFluor/gofinance.svg?branch=master)](https://travis-ci.org/MatFluor/gofinance) [![Go Report Card](https://goreportcard.com/badge/github.com/MatFluor/gofinance)](https://goreportcard.com/report/github.com/MatFluor/gofinance)
 
 a simple web application to aid in financial control through a daily "magic number"
 
