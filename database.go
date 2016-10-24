@@ -115,7 +115,7 @@ func SumSummary(db *sql.DB, period string) []Entry {
 	var sqlQuery string
 	switch period {
 	case "week":
-		sqlQuery = "SELECT strftime('%Y-%m-%d', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'weekday 1', '-7 days') ORDER BY time"
+		sqlQuery = "SELECT strftime('%Y-%m-%d', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'weekday 0', '-6 days') ORDER BY time"
 	case "month":
 		sqlQuery = "SELECT strftime('%Y-%m-%d', timestamp) as time, mapping, description, amount FROM transactions JOIN mappings USING (description) WHERE timestamp >= date('now', 'start of month') ORDER BY time"
 	case "year":
@@ -322,7 +322,7 @@ func totalExpenses(db *sql.DB, period string) float64 {
 	var totalExpenses float64
 	switch period {
 	case "week":
-		sqlRead = "SELECT SUM(amount) FROM transactions WHERE timestamp >= date('now', 'weekday 1', '-7 days');"
+		sqlRead = "SELECT SUM(amount) FROM transactions WHERE timestamp >= date('now', 'weekday 0', '-6 days');"
 	case "month":
 		sqlRead = "SELECT SUM(amount) FROM transactions WHERE timestamp >= date('now', 'start of month');"
 	case "year":
@@ -339,7 +339,7 @@ func sumUp(db *sql.DB, period string, labelchan chan []string, valchan chan []fl
 	var resultStr []string
 	switch period {
 	case "daily":
-		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'weekday 1', '-7 days') GROUP BY valDay"
+		sqlRead = "SELECT strftime('%d', timestamp) as valDay, SUM(amount) AS sum FROM transactions WHERE timestamp >= date('now', 'weekday 0', '-6 days') GROUP BY valDay"
 	case "type":
 		sqlRead = "SELECT mapping, SUM(amount) FROM transactions JOIN mappings ON mappings.description = transactions.description WHERE strftime('%Y', timestamp)=strftime('%Y',date('now')) GROUP BY mappings.mapping ORDER BY SUM(amount)"
 	case "monthly":
