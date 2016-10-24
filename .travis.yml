@@ -3,8 +3,8 @@ language: go
 go:
   - tip
   
- install:
+install:
   - go get github.com/julienschmidt/httprouter
   - go get github.com/MatFluor/gofinance
   
- script: scons
+gobuild_args: -x -ldflags "-s -w"
