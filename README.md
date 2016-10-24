@@ -3,7 +3,7 @@
 
 # GoFinance
 
-[![godoc reference](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)]()
+[![godoc reference](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/MatFluor/gofinance)
 [![Travis branch](https://img.shields.io/travis/MatFluor/gofinance/master.svg?style=flat-square)]()
 [![Go Report Card](https://goreportcard.com/badge/github.com/MatFluor/gofinance)]()
 
