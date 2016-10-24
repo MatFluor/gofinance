@@ -40,9 +40,15 @@ Since this in written and built with Go, just download the appropriate release f
 ## Credits
 
 Thanks to Alex Recker who wrote his blogpost "Our New Sid Meier's Civilization Inspired Budget".
-If you haven't read it, do it now!
-Also thanks to Julien Schmidt for his httprouter package.
+If you haven't read it, do it now! -> [Here](https://alexrecker.com/our-new-sid-meiers-civilization-inspired-budget.html)
+
+### Packages used
+- [httprouter](https://github.com/julienschmidt/httprouter) by Julien Schmidt
+- [go-sqlite3](https://github.com/mattn/go-sqlite3) by Yasuhiro Matsumoto (a.k.a mattn)
 
 ## License
 
 GoFinance is licensed under the GPLv3, see LICENSE.md
+
+## Author
+Matthias Fluor
