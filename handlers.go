@@ -1,7 +1,7 @@
 /*
 This file holds all the handlers - to keep the main go file a bit cleaner
 */
-package main
+package gofinance
 
 import (
 	"database/sql"
@@ -17,6 +17,7 @@ import (
 // Make the DB global for all
 var db *sql.DB
 
+// HandleStatsDetails handles the details page, where you can see all expenses.
 func handleStatsDetails(w http.ResponseWriter, r *http.Request, pr httprouter.Params) {
 	t, _ := template.ParseFiles("templates/details.html", "templates/header.html")
 	data := SumByCats(db, pr.ByName("type"))

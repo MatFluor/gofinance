@@ -4,8 +4,10 @@ Copyright 2016, Matthias Fluor
 This is a simple budgeting web app, based on the blog-post by Alex Recker:
 https://alexrecker.com/our-new-sid-meiers-civilization-inspired-budget.html
 
+To use, you simply compile and run the gofinance binary.
+
 */
-package main
+package gofinance
 
 import (
 	"log"

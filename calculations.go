@@ -1,12 +1,11 @@
 /*
 This file holds all calculation like sums, calculation of "magic number"
 */
-
-package main
+package gofinance
 
 import "time"
 
-// Calculates the so-called "Magic Number"
+// calcRate Calculates the so-called "Magic Number"
 // The daily amount of money you can spend for a signle fixed expense/income
 func calcRate(trans Transaction) float64 {
 	magicAdd := 0.0

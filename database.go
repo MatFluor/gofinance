@@ -2,7 +2,7 @@
 This file holds all the database-relevant functions
 like creation, insertion and reading
 */
-package main
+package gofinance
 
 import (
 	"database/sql"
@@ -12,7 +12,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// Transaction Basic type
+// Transaction Basic struct
+// Holds all information of a single transaction to interact (write and read) entries
+// from the database.
 type Transaction struct {
 	ID          int
 	Amount      float64
@@ -24,6 +26,7 @@ type Transaction struct {
 }
 
 // Category basic struct
+// Defines a single entry for a category with mapping and description
 type Category struct {
 	ID          sql.NullInt64
 	Mapping     sql.NullString
@@ -31,6 +34,7 @@ type Category struct {
 }
 
 // Single Entry struct
+// Represents a single entry
 type Entry struct {
 	Date        string
 	Mapping     string
@@ -38,13 +42,13 @@ type Entry struct {
 	Amount      float64
 }
 
-// ToNullInt64 helper to convert from regular int
+// ToNullInt64 helper to convert from regular int into float64
 func ToNullInt64(i int) sql.NullInt64 {
 	newI := int64(i)
 	return sql.NullInt64{Int64: newI, Valid: true}
 }
 
-// FromNullInt64 helper to convert that back
+// FromNullInt64 helper to convert from float64 back to int
 func FromNullInt64(i sql.NullInt64) int64 {
 	newI := i.Int64
 	return newI
@@ -55,6 +59,7 @@ func ToNullString(s string) sql.NullString {
 	return sql.NullString{String: s, Valid: s != ""}
 }
 
+// initDB initializes the database (read open)
 func initDB(filepath string) *sql.DB {
 	database, err := sql.Open("sqlite3", filepath)
 	if err != nil {
@@ -66,7 +71,7 @@ func initDB(filepath string) *sql.DB {
 	return database
 }
 
-// CreateTable to intialize the database
+// CreateTable to creates the database, if it not already exists
 func CreateTable(db *sql.DB) {
 	// Create if not exists
 	sqlTable := `
@@ -111,6 +116,8 @@ func CreateTable(db *sql.DB) {
 	}
 }
 
+// SumSummary is responsible for summing up all values for a specific period (week,
+// month or year) to display in the summary panel on the front page.
 func SumSummary(db *sql.DB, period string) []Entry {
 	var sqlQuery string
 	switch period {
