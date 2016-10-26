@@ -2,7 +2,7 @@
 This file holds all the database-relevant functions
 like creation, insertion and reading
 */
-package gofinance
+package main
 
 import (
 	"database/sql"

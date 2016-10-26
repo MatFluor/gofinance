@@ -7,9 +7,10 @@ https://alexrecker.com/our-new-sid-meiers-civilization-inspired-budget.html
 To use, you simply compile and run the gofinance binary.
 
 */
-package gofinance
+package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -37,6 +38,7 @@ func main() {
 	router.POST("/confirm/new/fixed", getFixInput)
 	router.POST("/confirm/categories", updateCats)
 	// Start the Webserver
+	fmt.Println("GoFinance has started successfully. Please visit http://localhost:8080/")
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", router)

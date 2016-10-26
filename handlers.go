@@ -1,7 +1,7 @@
 /*
 This file holds all the handlers - to keep the main go file a bit cleaner
 */
-package gofinance
+package main
 
 import (
 	"database/sql"

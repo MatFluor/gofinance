@@ -1,7 +1,7 @@
 /*
 This file holds all calculation like sums, calculation of "magic number"
 */
-package gofinance
+package main
 
 import "time"
 
