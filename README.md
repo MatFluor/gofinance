@@ -48,11 +48,13 @@ If you haven't read it, do it now! -> [Here (Archive link)](https://web.archive.
 
 ## Similar Projects
 
-If you liked this simple one, here are some other projects that could fit your way of handling things. Thanks to [Catpn3m0](https://github.com/captn3m0) for the suggestions.
+If you liked this simple one, here are some other projects that could fit your way of handling things.
 
-https://github.com/jwilson/frugal
-https://github.com/arecker/moolah
-https://github.com/EorlBruder/CivBudget
+Thanks to [Catpn3m0](https://github.com/captn3m0) for the suggestions.
+
+* https://github.com/jwilson/frugal
+* https://github.com/arecker/moolah
+* https://github.com/EorlBruder/CivBudget
 
 ### Packages used
 - [httprouter](https://github.com/julienschmidt/httprouter) by Julien Schmidt
