@@ -44,7 +44,15 @@ Since this in written and built with Go, just download the appropriate release f
 ## Credits
 
 Thanks to Alex Recker who wrote his blogpost "Our New Sid Meier's Civilization Inspired Budget".
-If you haven't read it, do it now! -> [Here](https://alexrecker.com/our-new-sid-meiers-civilization-inspired-budget.html)
+If you haven't read it, do it now! -> [Here (Archive link)](https://web.archive.org/web/20161113235648/https://alexrecker.com/our-new-sid-meiers-civilization-inspired-budget.html)
+
+## Similar Projects
+
+If you liked this simple one, here are some other projects that could fit your way of handling things. Thanks to [Catpn3m0](https://github.com/captn3m0) for the suggestions.
+
+https://github.com/jwilson/frugal
+https://github.com/arecker/moolah
+https://github.com/EorlBruder/CivBudget
 
 ### Packages used
 - [httprouter](https://github.com/julienschmidt/httprouter) by Julien Schmidt
